@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-db
+  template:
+    metadata:
+      labels:
+        app: flask-db
+    spec:
+      containers:
+        - name: flask-db
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: DB_NAME
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: DB_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: DB_PASS
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: DB_ROOT_PASSWORD
+          volumeMounts:
+            # database initialization SQL
+            - name: db-init
+              mountPath: /docker-entrypoint-initdb.d
+
+            #MySQL persistent data
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+
+      volumes:
+        #PVC
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+        
+        #configMap  containing init.sql
+        - name: db-init
+          configMap:
+            name: db-init-sql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-db
+spec:
+  selector:
+    app: flask-db
+  ports:
+    - port: 3306
+      targetPort: 3306
