@@ -1,0 +1,24 @@
+app:
+  replicaCount: 2
+  image:
+    repository: manister7/flask-mysql-backend
+    tag: "3"
+    pullPolicy: IfNotPresent
+  service:
+    type: NodePort
+    port: 5000
+    targetPort: 5000
+    nodePort: 30501
+
+mysql:
+  replicaCount: 1
+  image:
+    repository: mysql
+    tag: "8.0"
+    pullPolicy: IfNotPresent
+  service:
+    port: 3306
+    targetPort: 3306
+  storage:
+    size: 1Gi
+    accessMode: ReadWriteOnce
