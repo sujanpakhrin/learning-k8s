@@ -1,5 +1,5 @@
 app:
-  replicaCount: 3
+  replicaCount: 2
   image:
     repository: manister7/flask-mysql-backend
     tag: "3"
