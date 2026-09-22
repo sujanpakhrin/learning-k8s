@@ -1,8 +1,8 @@
 app:
   replicaCount: 3
   image:
-    repository: manister7/flask-mysql-backend
-    tag: "3"
+    repository: codeykenny/github-actions-learn-2
+    tag: "ccc2f4f800227e6f7d74bd57637f1d23e239e57f"
     pullPolicy: IfNotPresent
   service:
     type: NodePort
