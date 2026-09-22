@@ -7,7 +7,7 @@ spec:
   project: default
 
   source:
-    repoURL: git@github.com:sujanpakhrin/learning-k8s.git
+    repoURL: https://github.com/sujanpakhrin/learning-k8s.git
     targetRevision: main
     path: 03-helm/flask-app
 
